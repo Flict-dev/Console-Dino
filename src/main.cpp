@@ -12,12 +12,23 @@ int Screen::dino_default_row;
 HANDLE Screen::console_handler;
 DWORD Screen::bytes_written = 0;
 
+void printScore(int score) {
+	std::string str_score = std::to_string(score);
+	int gap = 0;
+	for (int i = 0; i < str_score.size(); i++) {
+		std::string cur(1, str_score[i]);
+		Sprite num(gap, 0, fileToArray("res/" + cur + ".bmp"), background);
+		num.print();
+		gap += 10;
+	}	
+}
+
 int main(int argc, char* argv[]) {
 	
 	// Handling console arguments
+	// Handling console arguments
 	double FRQ = 1.0/FPS;
 	std::clock_t start;
-	
 	// screen and game variables
 	int height = 64, width = 128, scale = 1, button = 0, tick = 1;
 
@@ -33,7 +44,7 @@ int main(int argc, char* argv[]) {
 	Screen::bytes_written = 0;
 	Screen::init(width, height);
 
-	Sprite clouds(0, 0, fileToArray("res/clouds.bmp"), background);
+	//Sprite clouds(0, 0, fileToArray("res/clouds.bmp"), background);
 	
 	image* gnd_img = fileToArray("res/ground.bmp");
 	Sprite gnd (0, Screen::height - 1 - gnd_img->h, gnd_img, background);
@@ -57,11 +68,11 @@ int main(int argc, char* argv[]) {
 restart:
 	jump_handler(dino);
 	Screen::clear();
+	float score = 0;
 
 	while (!(dino.check_hit(cactusk1) || dino.check_hit(cactusk2))) {
-
 		start = std::clock();
-
+		score += 0.05;
 		tick = (tick + 1) % 13;
 
 		if (dino.row == Screen::dino_default_row && !(tick % 6)) dino.bmp = dino_bmps[!(tick % 12)];
@@ -73,10 +84,10 @@ restart:
 		if (cactusk2.col < -cactusk2.getResolution().first + 1) cactusk2.col = Screen::width + random;
 
 		// Printing and ofsetting backs
-		if (tick % 3 == 0) clouds.offset();
-		clouds.print();
+		//if (tick % 3 == 0) clouds.offset();
+		//clouds.print();
 		gnd.offset().print();
-
+		printScore((int)score);
 		// Printing characters
 		dino.print();
 		cactusk1.print();
