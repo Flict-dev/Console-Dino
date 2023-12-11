@@ -1,6 +1,6 @@
 #pragma once
 
-#define random (rand() % 9) - 4
+#define random (rand() % 100)
 
 #include <iostream>
 #include <cstdlib>

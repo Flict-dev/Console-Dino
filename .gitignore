@@ -6,3 +6,4 @@ res/bmp.bmp.bak
 res/test.bmp
 src/bmp.cpp
 *.bak
+.vs
