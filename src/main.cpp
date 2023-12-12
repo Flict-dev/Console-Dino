@@ -61,7 +61,7 @@ int main(int argc, char* argv[]) {
 	cactusk1.row = height - 1 - cactusk1.getResolution().second - gnd_img->h;
 	Sprite cactusk2(width * 1.5 + random, cactusk1.row, fileToArray("res/cactus.bmp"), enemy);
 	cactusk2.row = height - 1 - cactusk2.getResolution().second - gnd_img->h;
-	// Sprite bird(0, 5, fileToArray("res/bird.bmp"), enemy);
+	Sprite bird(cactusk2.col + 73, 2, fileToArray("res/bird.bmp"), enemy);
 	// testImage(fileToArray("res/run1.bmp"));
 	{
 	Sprite(0,0,fileToArray("res/startscreen.bmp"), background).print();
@@ -75,8 +75,8 @@ restart:
 	float score = 0;
 	float speed_tick = 0;
 	float speed = (int)speed_tick / 100 == 0 ? 1 : (int)speed_tick / 100 + speed_tick / 1000.0;
-	float const speed_scale = 0.05;
-	while (!(dino.check_hit(cactusk1) || dino.check_hit(cactusk2))) {
+	float const speed_scale = 0.1;
+	while (!(dino.check_hit(bird) || dino.check_hit(cactusk1) || dino.check_hit(cactusk2))) {
 		start = std::clock();
 		score += speed_scale;
 		speed_tick += speed_scale;
@@ -95,8 +95,11 @@ restart:
 		if (cactusk2.col < -cactusk2.getResolution().first + 1) {
 			cactusk2.col = Screen::width + cactusk1.col + get_distance(speed);
 			if (cactusk1.col > 128 && get_distance(speed) % 3 == 0) {
-				cactusk2.col = cactusk1.col + 16;
-			} else if (cactusk1.col > 128 ){
+				cactusk2.col = cactusk1.col + 10;
+				if (bird.col < -bird.getResolution().first + 1) {
+					bird.col = cactusk1.col + 64;
+				}
+			} else if (cactusk1.col > 128){
 				cactusk2.col = cactusk1.col + get_distance(speed) + 100;
 ;
 			}
@@ -110,7 +113,7 @@ restart:
 		//printScore(get_distance(speed), 12);
 		// Printing characters
 		dino.print();
-		// bird.print();
+		bird.print();
 		cactusk1.print();
 		cactusk2.print();
 
@@ -140,10 +143,10 @@ restart:
 		}
 		jump_handler(dino.clear(), button); button = 0;
 
-		// Moving cactuskes
+		// Moving enemies
 		cactusk1.clear().col-= speed;
 		cactusk2.clear().col -= speed;
-		// bird.clear().col-= speed;
+		bird.clear().col -= speed;
 
 		// Framerate control
 
@@ -154,6 +157,7 @@ restart:
 	// Resetting all values
 	cactusk1.col = Screen::width;
 	cactusk2.col = Screen::width + random + (Screen::width / 2);
+	bird.col = cactusk2.col + 50;
 	jump_handler(dino, RESET);
 	tick = 1;
 	{

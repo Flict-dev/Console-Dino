@@ -82,8 +82,9 @@ bool Sprite::check_hit(Sprite &enemy) {
 	}
 	else {
 		if (col + height < enemy.col || col > enemy.col + enemy.width) return false;
-		else return true;
+		return true;
 	}
+
 }
 
 void Sprite::test() { print(); Screen::display(); printf("%d %d %d %d \n", height, width, col, row);}
