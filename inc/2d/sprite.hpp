@@ -26,6 +26,7 @@ public:
 	int col;
 	int row;
 	char** bmp;
+	bool is_down = false;
 	
 	
 	Sprite(int _col, int _row, image* _img, state _kind);

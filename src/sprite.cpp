@@ -33,6 +33,7 @@ void Sprite::print() {
 	else if (kind == enemy) {
 		int l_offset = 0, r_offset = 0;
 		if (col > (Screen::width - 1)) return;
+		else if (col + width < 0) return;
 		else if (col < 0) l_offset = 0 - col;
 		else if (col >= Screen::width - 1 - width) r_offset = width - (Screen::width - col);
 		
@@ -77,12 +78,20 @@ Sprite & Sprite::clear() {
 }
 
 bool Sprite::check_hit(Sprite &enemy) {
-	if (((row + height) / 4 * 3  < enemy.row) || ((enemy.row + enemy.height) / 4 * 3  < row)) {
+	if (enemy.height == 10) {
+		if (enemy.col == col + 10 && !is_down) {
+			return true;
+		}
+		return false;
+	};
+	if (((row + height) / 5 * 4 < enemy.row) || ((enemy.row + enemy.height) / 5 * 4 < row)) {
 		return false;
 	}
 	else {
+		// if ((col + height < enemy.col || col > enemy.col + enemy.width) && enemy.height == 10 && is_down) return false;
 		if (col + height < enemy.col || col > enemy.col + enemy.width) return false;
 		return true;
+
 	}
 
 }
