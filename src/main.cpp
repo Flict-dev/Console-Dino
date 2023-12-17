@@ -20,7 +20,7 @@ void printScore(int score, int initial = 0) {
 		Sprite num(space, initial, fileToArray("res/" + cur + ".bmp"), background);
 		num.print();
 		space += 10;
-	}	
+	}
 }
 int get_distance(float speed) {
 	return (std::rand() + 100) % (int)(speed * 100);
@@ -28,18 +28,16 @@ int get_distance(float speed) {
 
 
 int main(int argc, char* argv[]) {
-	std::string name;
-	std::getline(std::cin, name);
 	// Handling console arguments
 	// Handling console arguments
-	double FRQ = 1.0/FPS;
+	double FRQ = 1.0 / FPS;
 	std::clock_t start;
 	// screen and game variables
 	int height = 64, width = 128, scale = 1, button = 0, tick = 1;
 
-	for(int i = 1; i < argc; i++) {
-		if ((std::string) argv[i] == "-h" ) {printf("Usage: %s [-h | --help] [-f | --fps <FPS> (default = 60)] ", argv[0]); return 0;}
-		else if ((std::string) argv[i] == "-f" || (std::string) argv[i] == "--fps") FRQ = 1.0/atoi(argv[i+1]);
+	for (int i = 1; i < argc; i++) {
+		if ((std::string)argv[i] == "-h") { printf("Usage: %s [-h | --help] [-f | --fps <FPS> (default = 60)] ", argv[0]); return 0; }
+		else if ((std::string)argv[i] == "-f" || (std::string)argv[i] == "--fps") FRQ = 1.0 / atoi(argv[i + 1]);
 	}
 
 	// Screen initialization
@@ -50,15 +48,15 @@ int main(int argc, char* argv[]) {
 	Screen::init(width, height);
 
 	// Sprite clouds(0, 5, fileToArray("res/clouds.bmp"), background);
-	
+
 	image* gnd_img = fileToArray("res/ground.bmp");
-	Sprite gnd (0, Screen::height - 1 - gnd_img->h, gnd_img, background);
+	Sprite gnd(0, Screen::height - 1 - gnd_img->h, gnd_img, background);
 
-	char** dino_up_bmps[3] = {fileToArray("res/run1.bmp")->bmp, fileToArray("res/run2.bmp")->bmp, fileToArray("res/jump.bmp")->bmp};
+	char** dino_up_bmps[3] = { fileToArray("res/run1.bmp")->bmp, fileToArray("res/run2.bmp")->bmp, fileToArray("res/jump.bmp")->bmp };
 
-	char** dino_down_bmps[2] = { fileToArray("res/run3.bmp")->bmp, fileToArray("res/run4.bmp")->bmp};
+	char** dino_down_bmps[2] = { fileToArray("res/run3.bmp")->bmp, fileToArray("res/run4.bmp")->bmp };
 
-	Sprite dino (Screen::width / 12, 0, fileToArray("res/run1.bmp"), character);
+	Sprite dino(Screen::width / 12, 0, fileToArray("res/run1.bmp"), character);
 	Screen::dino_default_row = Screen::height - 1 - dino.getResolution().second - gnd_img->h;
 
 	Sprite cactusk1(width + random, 0, fileToArray("res/cactus.bmp"), enemy);
@@ -67,10 +65,23 @@ int main(int argc, char* argv[]) {
 	cactusk2.row = height - 1 - cactusk2.getResolution().second - gnd_img->h;
 	Sprite bird(cactusk2.col + 73, 26, fileToArray("res/bird.bmp"), enemy);
 	// testImage(fileToArray("res/run1.bmp"));
-	{
-	// Sprite(0,0,fileToArray("res/startscreen.bmp"), background).print();
-	Screen::display();
-	if (_getch() == 27) {printf("Thanks for playing"); return 0; }
+	{	
+		Sprite btn(0, 0, fileToArray("res/alphabet/48.bmp"), background);
+		btn.print();
+		while (true) {
+			if (_kbhit()) {
+				int cur_btn = getch();
+				if (cur_btn == 27) break;
+				std::string ascii_code = std::to_string(cur_btn);
+				btn.bmp = fileToArray("res/alphabet/" + ascii_code + ".bmp")->bmp;
+			};
+			btn.print();
+
+		};
+		
+		// Sprite(0,0,fileToArray("res/startscreen.bmp"), background).print();
+		Screen::display();
+		if (_getch() == 27) { printf("Thanks for playing"); return 0; }
 	}
 
 restart:
@@ -91,7 +102,7 @@ restart:
 		if (dino.is_down && dino.row == Screen::dino_default_row && !(tick % 6)) dino.bmp = dino_down_bmps[!(tick % 12)];
 		else if (dino.row == Screen::dino_default_row && !(tick % 6)) dino.bmp = dino_up_bmps[!(tick % 12)];
 		else if (dino.row < Screen::dino_default_row) dino.bmp = dino_up_bmps[2];
-		else if (dino.row > Screen::dino_default_row) { printf("ERROR: character row %d", dino.row); return 1; } 
+		else if (dino.row > Screen::dino_default_row) { printf("ERROR: character row %d", dino.row); return 1; }
 
 		// Respawning enemies
 		if (cactusk1.col < -cactusk1.getResolution().first + 1) {
@@ -104,9 +115,10 @@ restart:
 				if (bird.col < -bird.getResolution().first + 1) {
 					bird.col = cactusk1.col + 124;
 				}
-			} else if (cactusk1.col > 128){
+			}
+			else if (cactusk1.col > 128) {
 				cactusk2.col = cactusk1.col + get_distance(speed) + 100;
-;
+				;
 			}
 		}
 
@@ -134,11 +146,11 @@ restart:
 				dino.is_down = false;
 				button = 1;
 				break;
-			
+
 			case 83:
 			case 115:
 				dino.is_down = true;
-				Screen::jump_tick =	0;
+				Screen::jump_tick = 0;
 				break;
 
 			case 27:
@@ -151,16 +163,16 @@ restart:
 		jump_handler(dino.clear(), button); button = 0;
 
 		// Moving enemies
-		cactusk1.clear().col-= speed;
+		cactusk1.clear().col -= speed;
 		cactusk2.clear().col -= speed;
 		bird.clear().col -= speed;
 
 		// Framerate control
 
-		while ((( std::clock() - start ) / (double) CLOCKS_PER_SEC) < FRQ);
+		while (((std::clock() - start) / (double)CLOCKS_PER_SEC) < FRQ);
 
-    	}
-	
+	}
+
 	// Resetting all values
 	cactusk1.col = Screen::width;
 	cactusk2.col = Screen::width + random + (Screen::width / 2);
@@ -168,9 +180,9 @@ restart:
 	jump_handler(dino, RESET);
 	tick = 1;
 	{
-	Sprite(0,0,fileToArray("res/endscreen.bmp"), background).print();
-	Screen::display();
-	if (_getch() == 27) { printf("Thanks for playing"); return 0; }
+		Sprite(0, 0, fileToArray("res/endscreen.bmp"), background).print();
+		Screen::display();
+		if (_getch() == 27) { printf("Thanks for playing"); return 0; }
 	}
 	// Restart
 	goto restart;
