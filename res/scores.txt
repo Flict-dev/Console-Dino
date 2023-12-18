@@ -1,3 +1,5 @@
 bebra 7
 dick 20
+ilya 35
 lox 15
+pol 66

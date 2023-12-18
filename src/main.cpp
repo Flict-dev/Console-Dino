@@ -19,7 +19,7 @@ void printScore(int score, int initial_x = 0, int initial_y = 0) {
 		std::string cur(1, str_score[i]);
 		Sprite num(space, initial_y, fileToArray("res/" + cur + ".bmp"), background);
 		num.print();
-		space += 10;
+		space += 6;
 	}
 }
 
@@ -237,7 +237,7 @@ int main(int argc, char* argv[]) {
 restart:
 	jump_handler(dino);
 	Screen::clear();
-	std::map<std::string, int> user_table = readMapFromFile("scores.txt");
+	std::map<std::string, int> user_table = readMapFromFile("res/scores.txt");
 	float score = 0;
 	float speed_tick = 0;
 	float speed = (int)speed_tick / 100 == 0 ? 1 : (int)speed_tick / 100 + speed_tick / 1000.0;
@@ -368,7 +368,7 @@ restart:
 		user_table[nickname_key] = score;
 	}
 	std::vector<v_pair> top_players = sortMap(user_table);
-	writeMapToFile(user_table, "scores.txt");
+	writeMapToFile(user_table, "res/scores.txt");
 
 	// Resetting all values
 	cactusk1.col = Screen::width;
