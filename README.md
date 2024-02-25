@@ -1,5 +1,5 @@
 # Console-Dino 
-> My 1st project, that was going to be ported on the stm32, but...
+> Simple implemetation Google Dino in console as student project in my uv.
 ## Compiling
 ```sh
 make
