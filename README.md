@@ -1,5 +1,5 @@
 # Console-Dino 
-> Simple implemetation Google Dino in console as student project in my uv.
+> A simple Google Dino implementation in the console as a student project in my uv.
 ## Compiling
 ```sh
 make
